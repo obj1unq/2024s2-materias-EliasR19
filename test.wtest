@@ -1,0 +1,53 @@
+import materias.*
+
+
+describe "Prueba"{
+    test "Estudiante puede entrar a una materia"{
+
+        const matematica1 = new Materia(carrera = programacion)
+        var roque = new Estudiante()
+
+        roque.cursoMateria(matematica1, 6)
+
+        assert.equals(roque, roque.gestor().historialMateriasAprobadas().head().nombreEstudiante())
+
+        //assert.equals(matematica1, roque.historialAcademico().head().materia())
+
+        //assert.equals(6, roque.historialAcademico().head().nota())
+
+    }
+
+    test "Cantidad de materias aprobadas"{
+        
+        const matematica1 = new Materia(carrera = programacion)
+        const objetos1 = new Materia(carrera = programacion)
+        var roque = new Estudiante()
+
+        roque.cursoMateria(matematica1, 6)
+        roque.cursoMateria(objetos1, 10)
+
+        assert.equals(2, roque.gestor().cantMateriasAprobadas())
+
+    }
+
+    test "promedio"{
+         const matematica1 = new Materia(carrera = programacion)
+        const objetos1 = new Materia(carrera = programacion)
+        var roque = new Estudiante()
+
+        roque.cursoMateria(matematica1, 6)
+        roque.cursoMateria(objetos1, 10)
+
+        assert.equals(8, roque.gestor().promedioMaterias())
+    }
+    test "tiene materias aprobadas"{
+        const matematica1 = new Materia(carrera = programacion)
+        const objetos1 = new Materia(carrera = programacion)
+        var roque = new Estudiante()
+
+        roque.cursoMateria(matematica1, 6)
+        roque.cursoMateria(objetos1, 10)
+
+        assert.equals(true, roque.gestor().tieneMateriasAprobadas())
+    }
+    }

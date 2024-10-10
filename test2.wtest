@@ -1,0 +1,28 @@
+import materuiasIntento2.*
+
+describe"Punto 1"{
+    test"Roque se inscribe auna materia"{
+
+        const matematica1 = new Materia(carrera = programacion)
+        const roque = new Estudiante()
+
+        roque.inscribir(matematica1, 4)
+        const materiasCursadas = roque.gestor().historialCursadas().map({cursada => cursada.materia()})
+
+
+        assert.equals([matematica1], materiasCursadas)
+        assert.equals([matematica1], roque.gestor().materiasAprobadas())
+
+    }
+}
+
+describe"Validador de materia"{
+    test"Error en materia ya cursada y aprobada"{
+        const matematica1 = new Materia(carrera = programacion)
+        const roque = new Estudiante()
+
+        roque.inscribir(matematica1, 4)
+        
+        assert.throwsException({ roque.inscribir(matematica1, 4) })
+    }
+}

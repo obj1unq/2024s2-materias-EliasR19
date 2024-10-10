@@ -1,19 +1,4 @@
-//CARRERAS 
-object programacion{
 
-}
-object medicina{
-
-}
-object derecho{
-
-}
-
-//MATERIAS
-class Materia{
-    const carrera
-
-}
 
 //ESTUDIANTE
 class Estudiante{
@@ -65,6 +50,11 @@ class GestorEstudiante{
         return !historialCursadasAprobadas.isEmpty()
     }
 
+    //TODAS LAS MATERIAS DE TODAS LAS CARRERAS A LAS QUE ESTA INSCRIPTO
+    method materiasTotales(){
+        return self.materiasAprobadas()
+    }
+
 }
 
 class Cursada{
@@ -72,11 +62,6 @@ class Cursada{
     var property nombreEstudiante
     var property materia
     var property nota
-
-
-    method estaAprobada(){
-        return nota >= 4
-    }
 
 }
 
@@ -93,4 +78,24 @@ object cursadaFactory{
     method crear(estudiante, materia, nota){
         return new Cursada(nombreEstudiante= estudiante, materia = materia, nota = nota)
     }
+}
+
+
+/// EXTRAS
+
+//CARRERAS 
+object programacion{
+
+}
+object medicina{
+
+}
+object derecho{
+
+}
+
+//MATERIAS
+class Materia{
+    const carrera
+
 }

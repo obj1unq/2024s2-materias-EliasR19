@@ -7,11 +7,11 @@ describe "Prueba"{
         const matematica1 = new Materia(carrera = programacion)
         var roque = new Estudiante()
 
-        roque.cursoMateria(matematica1, 6)
+        roque.inscribir(matematica1, 6)
 
-        assert.equals(roque, roque.gestor().historialMateriasAprobadas().head().nombreEstudiante())
+        assert.equals(roque, roque.gestor().historialCursadasAprobadas().head().nombreEstudiante())
 
-        //assert.equals(matematica1, roque.historialAcademico().head().materia())
+        assert.equals(matematica1, roque.gestor().historialCursadasAprobadas().head().materia())
 
         //assert.equals(6, roque.historialAcademico().head().nota())
 
@@ -23,8 +23,8 @@ describe "Prueba"{
         const objetos1 = new Materia(carrera = programacion)
         var roque = new Estudiante()
 
-        roque.cursoMateria(matematica1, 6)
-        roque.cursoMateria(objetos1, 10)
+        roque.inscribir(matematica1, 6)
+        roque.inscribir(objetos1, 10)
 
         assert.equals(2, roque.gestor().cantMateriasAprobadas())
 
@@ -35,8 +35,8 @@ describe "Prueba"{
         const objetos1 = new Materia(carrera = programacion)
         var roque = new Estudiante()
 
-        roque.cursoMateria(matematica1, 6)
-        roque.cursoMateria(objetos1, 10)
+        roque.inscribir(matematica1, 6)
+        roque.inscribir(objetos1, 10)
 
         assert.equals(8, roque.gestor().promedioMaterias())
     }
@@ -45,9 +45,43 @@ describe "Prueba"{
         const objetos1 = new Materia(carrera = programacion)
         var roque = new Estudiante()
 
-        roque.cursoMateria(matematica1, 6)
-        roque.cursoMateria(objetos1, 10)
+        roque.inscribir(matematica1, 6)
+        roque.inscribir(objetos1, 10)
 
         assert.equals(true, roque.gestor().tieneMateriasAprobadas())
     }
     }
+
+
+describe "Validar materia ya cursasa"{
+    test"Da error al meter materia que ya esta aprobada"{
+        const matematica1 = new Materia(carrera = programacion)
+        const objetos1 = new Materia(carrera = programacion)
+        var roque = new Estudiante()
+
+        roque.inscribir(matematica1, 6)
+        roque.inscribir(objetos1, 10)
+
+        assert.throwsException({ roque.inscribir(matematica1, 6) })
+  
+    }
+}
+
+
+
+
+
+
+
+
+// PARA SABER COMO FUNCIONA LA CURSADA
+describe "cursada test"{
+    test"ayyuda :,"{
+       var roque = new Estudiante()
+        const matematica1 = new Materia(carrera = programacion)
+
+        const cursadaA = new Cursada(nombreEstudiante = roque, materia = matematica1, nota = 6)
+        
+        assert.equals(matematica1, cursadaA.materia())
+    }
+}

@@ -20,64 +20,59 @@ class Estudiante{
     
     const property gestor = new GestorEstudiante()
 
-    method cursoMateria(materia, nota){
+    method inscribir(materia, nota){
         gestor.evaluarAprobacion(self, materia, nota)
     }
 }
 
 class GestorEstudiante{
     //const property historialAcademico = []
-    const property historialMateriasAprobadas = []
+    const property historialCursadasAprobadas = []
 
 
     //NUEVA MATEIRA
     method evaluarAprobacion(estudiante, materia, nota){
+        self.validarMateria(materia)
         instanciaAprobacion.aprobo(estudiante, materia, nota)
     }
 
+    method validarMateria(materia){
+        if(self.materiasAprobadas().contains(materia)){
+            self.error("Esa materia ya esta curdasa")
+        }
+    }
+
+    method materiasAprobadas(){
+        return historialCursadasAprobadas.map({aprobada => aprobada.materia()})
+    }
+
     method agregarMateriaAprobada(estudiante,materia, nota){
-        historialMateriasAprobadas.add(new Cursada(nombreEstudiante= estudiante, materia = materia, nota = nota))
+        historialCursadasAprobadas.add(cursadaFactory.crear(estudiante,materia, nota))
     }
 
     //CANRTIDAD APROBADAS
     method cantMateriasAprobadas() {
-        return historialMateriasAprobadas.size()
+        return historialCursadasAprobadas.size()
     }
 
     //PROMEIDO
     method promedioMaterias(){
-        return historialMateriasAprobadas.sum({materia => materia.nota()}) / self.cantMateriasAprobadas()
+        return historialCursadasAprobadas.sum({materia => materia.nota()}) / self.cantMateriasAprobadas()
     }
 
     //TIENE O NO MATERIAS APROBADAS
     method tieneMateriasAprobadas(){
-        return !historialMateriasAprobadas.isEmpty()
+        return !historialCursadasAprobadas.isEmpty()
     }
 
-    //CANTIDAD DE MATERIAS APROBADAS
-    /*
-    method cantMateriasAprobadas() {
-        return historialAcademico.count({materia => materia.estaAprobada()})
-    }
-
-    //PROMEDIO
-
-    method promedioMaterias(){
-        return (historialAcademico.sum({materia => materia.nota()})) / historialAcademico.size()
-    }
-
-    //TIENE O NO MATERIAS APROBADAS
-    method tieneMateriasAprobadas(){
-        return historialAcademico.any({materia => materia.estaAprobada()})
-    }
-    */
 }
 
 class Cursada{
 
-    var property nota
-    var property materia
     var property nombreEstudiante
+    var property materia
+    var property nota
+
 
     method estaAprobada(){
         return nota >= 4
@@ -91,5 +86,11 @@ object instanciaAprobacion{
         if(nota >= 4){
             estudiente.gestor().agregarMateriaAprobada(estudiente, materia, nota)
         }
+    }
+}
+
+object cursadaFactory{
+    method crear(estudiante, materia, nota){
+        return new Cursada(nombreEstudiante= estudiante, materia = materia, nota = nota)
     }
 }

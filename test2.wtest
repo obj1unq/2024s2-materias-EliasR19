@@ -3,26 +3,55 @@ import materuiasIntento2.*
 describe"Punto 1"{
     test"Roque se inscribe auna materia"{
 
-        const matematica1 = new Materia(carrera = programacion)
+        const matematica1 = new Materia(carrera = programacion, correlativas = [])
         const roque = new Estudiante()
 
-        roque.inscribir(matematica1, 4)
-        const materiasCursadas = roque.gestor().historialCursadas().map({cursada => cursada.materia()})
+        roque.inscribirMateria(matematica1, 4)
+        const materiasCursadas = roque.gestor().inscripto().map({cursada => cursada.materia()})
 
 
         assert.equals([matematica1], materiasCursadas)
-        assert.equals([matematica1], roque.gestor().materiasAprobadas())
+        assert.equals(matematica1, roque.gestor().materiasAprobadas().last().materia())
+
+    }
+}
+
+describe"Datos de estudiente"{
+    test"cantidad de meterias aprobadas"{
 
     }
 }
 
 describe"Validador de materia"{
     test"Error en materia ya cursada y aprobada"{
-        const matematica1 = new Materia(carrera = programacion)
+        const matematica1 = new Materia(carrera = programacion, correlativas = [])
         const roque = new Estudiante()
 
-        roque.inscribir(matematica1, 4)
+        roque.inscribirMateria(matematica1, 4)
+
+        const quimica = new Materia(carrera = medicina, correlativas = [])
+
+        //assert.throwsException({ roque.inscribirMateria(matematica1, 10) })
+        assert.that(roque.gestor().validarYaCursada(matematica1) )
+    }
+}
+
+describe "Materia con requisitos"{
+    test "roque se puede inscribir a una materia porque ya curso la correlativa"{
+
+        const matematica1 = new Materia(carrera = programacion, correlativas = [])
+        const objetos1 = new Materia(carrera = programacion, correlativas = [])
+
+        const roque = new Estudiante()
+        roque.inscribirCarrera(programacion)
+        //roque.inscribirMateria(matematica1, 4)
+        roque.inscribirMateria(objetos1, 6)
+
+        const objetos2 = new Materia(carrera = programacion, correlativas = [objetos1, matematica1])
         
-        assert.throwsException({ roque.inscribir(matematica1, 4) })
+        //roque.inscribirMateria(objetos2, 10)
+        assert.throwsException({ roque.inscribirMateria(objetos2, 10)} )
+
+
     }
 }

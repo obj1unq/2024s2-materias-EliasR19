@@ -2,47 +2,76 @@
 class Estudiante{
     
     const property gestor = new GestorEstudiante()
-
-    method inscribir(materia, nota){
+    method inscribirCarrera(carrera){
+        gestor.inscribirCarrera(carrera)
+    }
+    method inscribirMateria(materia, nota){
         gestor.inscribir(self, materia, nota)
     }
 }
 
 class GestorEstudiante{
-    //const property historialAcademico = []
-    const property historialCursadas = []
+    const property carreras = []
+    const property inscripto = []
     const property materiasAprobadas = []
+
+    method inscribirCarrera(carrera){
+        carreras.add(carrera)
+    }
 
     method inscribir(estudiante, materia, nota){
         self.validarInscribir(materia)
-        historialCursadas.add(cursadaFactory.crear(estudiante, materia, nota))
-        instanciaAprobacion.evaluar(estudiante, materia, nota)
+        inscripto.add(cursadaFactory.crear(estudiante, materia, nota))
+        instanciaAprobacion.evaluar(inscripto.last())
     }
 
     method validarInscribir(materia){
-        if(materiasAprobadas.contains(materia)){
-            self.error("Ya fue cursada y esta aprobada")
+        if(!self.validarCarrera(materia) || self.validarYaCursada(materia) || !self.validarCorrelativas(materia)){
+            self.error("No se puede inscribir")
         }
     }
 
+    //la materia ya fue cursada
+    method validarYaCursada(materia){
+        return materiasAprobadas.any({cursada => cursada.materia() == materia})
+    }
+    //el estudiante no esta cursando esta carrera
+    method validarCarrera(materia){
+        return carreras.any({carrera => carrera == materia.carrera()})
+    }
+    //el estudiante tiene ya aprobadas las correlativas de x carrera
+    method validarCorrelativas(materia){
+        return materia.correlativas().all( {materiaCor => self.aproboCorrelativa(materiaCor) })
+    }
+    method aproboCorrelativa(correlativa){
+        return materiasAprobadas.any({cursada => cursada.materia() == correlativa})
+    }
+
+
+
+
+
     //CANT APROBADAS
     method cantAprobadas(){
-        return historialCursadas.count({cursada => cursada.estaAprobada()})
+        return inscripto.count({cursada => cursada.estaAprobada()})
+        //return materiasAprobadas.size()
     }
 
     //PROMERO
+    // con todas las materias o solo las aprobadas?
     method promedio(){
-        return historialCursadas.sum({cursada => cursada.nota()}) / self.cantAprobadas()
+        return inscripto.sum({cursada => cursada.nota()}) / self.cantAprobadas()
     }
 
     //TIENE O NO APROBADAS
     method tieneAprobadas(){
         return self.cantAprobadas() > 0
+        // return !materiasAprobadas.isEmpty()
     }
     
-
+    //coleccion de materas
     method materiasTotal(){
-        return historialCursadas.map({cursada => cursada.materia()})
+        return inscripto.map({cursada => cursada.materia()})
     }
 
 }
@@ -58,10 +87,12 @@ class Cursada{
     }
 }
 
+
+
 object instanciaAprobacion{
-    method evaluar(estudiante, materia, nota){
-        if(nota >= 4){
-            estudiante.gestor().materiasAprobadas().add(materia)
+    method evaluar(cursada){
+        if(cursada.nota() >= 4){
+            cursada.nombreEstudiante().gestor().materiasAprobadas().add(cursada)
         }
     }
 
@@ -89,6 +120,7 @@ object derecho{
 
 //MATERIAS
 class Materia{
-    const carrera
+    const property carrera
+    var property correlativas
 
 }

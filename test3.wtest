@@ -40,6 +40,23 @@ describe "punto 2"{
         }   
 }
 
+describe "punto 3"{
+        const pepe = new Estudiante()
+        const matematica1 = new Materia(carrera = programacion)
+        const objetos1 = new Materia(carrera = programacion)
+
+        
+
+
+    test "validar aprobada"{
+            pepe.gestor().materiaAprobada(matematica1, 7)
+
+            assert.throwsException({pepe.gestor().materiaAprobada(matematica1, 8)})
+            assert.doesNotThrowException({pepe.gestor().materiaAprobada(objetos1, 10)}) 
+
+        }
+}
+
 
 
 

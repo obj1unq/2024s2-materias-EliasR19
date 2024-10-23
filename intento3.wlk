@@ -22,6 +22,7 @@ class GestorEstudiante{
     const property materiasInscriptoActual = []
 
     method materiaAprobada(materia, nota){
+        self.validarMateriaAprobada(materia)
         materiasAprobadas.add(gestorAprobadaFactory.aprobada(nombre, materia, nota))
     }
 
@@ -37,6 +38,14 @@ class GestorEstudiante{
     method tieneAprobada(materia){
         return listaAMaterias.materiasAprobadas(nombre).contains(materia)
     }
+
+    method validarMateriaAprobada(materia){
+        if(self.tieneAprobada(materia)){
+            self.error(materia + " ya fue cursada y aprobada")
+        }
+    }
+
+ 
 
 }
 

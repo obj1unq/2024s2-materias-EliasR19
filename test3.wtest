@@ -1,6 +1,6 @@
 import intento3.*
 
-describe "punto1" {
+describe "punto 1" {
     test "estudiante materia aprobada"{
         const pepe = new Estudiante()
         const matematica1 = new Materia(carrera = programacion)
@@ -9,3 +9,42 @@ describe "punto1" {
         assert.equals([matematica1], listaAMaterias.materiasAprobadas(pepe))
     }
 }
+
+describe "punto 2"{
+        const pepe = new Estudiante()
+        const matematica1 = new Materia(carrera = programacion)
+        const objetos1 = new Materia(carrera = programacion)
+        const elementosProgram = new Materia(carrera = programacion)
+        test "cantidad materias"{
+            pepe.gestor().materiaAprobada(matematica1, 7)
+            pepe.gestor().materiaAprobada(objetos1, 10)
+            pepe.gestor().materiaAprobada(elementosProgram, 6)
+
+            assert.equals(3, pepe.gestor().cantAprobadas())
+        }
+
+        test "promedio"{
+            pepe.gestor().materiaAprobada(matematica1, 7)
+            pepe.gestor().materiaAprobada(objetos1, 10)
+            pepe.gestor().materiaAprobada(elementosProgram, 6)
+
+            assert.equals(7.6, pepe.gestor().promedio().truncate(1))
+        }
+
+        test "tiene aprobada X materia"{
+            pepe.gestor().materiaAprobada(matematica1, 7)
+            pepe.gestor().materiaAprobada(objetos1, 10)
+            pepe.gestor().materiaAprobada(elementosProgram, 6)
+
+            assert.that(pepe.gestor().tieneAprobada(matematica1))
+        }   
+}
+
+
+
+
+//TEORIA (pasar a papel)
+//en la super clase se tiene un metodo que llama a otros métodos, y ese metodo todos lo heredan y nadie lo modifica
+//template method, es un metodo tipo funcion que tiene partes adentro que se van cambiando en otrs lados. y la formula del metodo es la misma, pero cambias datos.
+//Patrón de diseño: template method -> una método se define como subtareas a, b oi más y luego las subclases redefinen lo que necesiten pero no el método que los utiliza
+//SI hay "un cachito que cambia" en ves de reescribir todo se aísla dicho segmento a una subtarea para solo cambiar / sobrescribir eso.

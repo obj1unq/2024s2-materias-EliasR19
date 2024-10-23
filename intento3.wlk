@@ -25,16 +25,29 @@ class GestorEstudiante{
         materiasAprobadas.add(gestorAprobadaFactory.aprobada(nombre, materia, nota))
     }
 
+    // PUNTO 2
+    method cantAprobadas(){
+        return materiasAprobadas.size()
+    }
+
+    method promedio(){
+        return (materiasAprobadas.sum({gestorM => gestorM.nota()})) / self.cantAprobadas()
+    }
+
+    method tieneAprobada(materia){
+        return listaAMaterias.materiasAprobadas(nombre).contains(materia)
+    }
+
 }
 
-class gestorMateriaAprobada {
+class GestorMateriaAprobada {
     var property estudiante
     var property materia
     var property nota
 }
 object gestorAprobadaFactory{
     method aprobada(estudiante, materia, nota){
-        return new gestorMateriaAprobada(estudiante = estudiante, materia = materia, nota = nota)
+        return new GestorMateriaAprobada(estudiante = estudiante, materia = materia, nota = nota)
     }
 }
 

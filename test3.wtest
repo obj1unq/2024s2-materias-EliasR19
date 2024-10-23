@@ -1,0 +1,11 @@
+import intento3.*
+
+describe "punto1" {
+    test "estudiante materia aprobada"{
+        const pepe = new Estudiante()
+        const matematica1 = new Materia(carrera = programacion)
+        pepe.gestor().materiaAprobada(matematica1, 7)
+
+        assert.equals([matematica1], listaAMaterias.materiasAprobadas(pepe))
+    }
+}

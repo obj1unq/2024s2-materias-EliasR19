@@ -3,13 +3,15 @@
 //historial de materias aprobadas de un estudiante
 
 object programacion{
-
+    var property materias = []
 }
-object medicina{
 
+object medicina{  
+    var property materias = [] 
 }
+
 object derecho{
-
+    var property materias = []
 }
 
 class Estudiante{
@@ -23,7 +25,11 @@ class GestorEstudiante{
 
     method materiaAprobada(materia, nota){
         self.validarMateriaAprobada(materia)
-        materiasAprobadas.add(gestorAprobadaFactory.aprobada(nombre, materia, nota))
+        materiasAprobadas.add(gestorAprobadaFactory.agregar(nombre, materia, nota))
+    }
+
+    method inscribir(materia){
+        materiasInscriptoActual.add(gestorInscriptoFactory.agregar(nombre, materia))
     }
 
     // PUNTO 2
@@ -36,38 +42,64 @@ class GestorEstudiante{
     }
 
     method tieneAprobada(materia){
-        return listaAMaterias.materiasAprobadas(nombre).contains(materia)
+        return listaAMaterias.materias(materiasAprobadas).contains(materia)
     }
 
+    //PUNTO 3
     method validarMateriaAprobada(materia){
         if(self.tieneAprobada(materia)){
             self.error(materia + " ya fue cursada y aprobada")
         }
     }
 
+    //PUNTO 4 preguntar
+    method mateirasDeCarrerasInscripto(){
+        return listaACarreras.carreras(materiasInscriptoActual).asSet().flatMap({carrera => carrera.materias()})
+    }
+    // se pueden hacer objetos para calcular cosas asi? o es mejor ponerlos en un método o hacerlo de otra forma?
  
 
 }
 
-class GestorMateriaAprobada {
+class GestorMateria{
     var property estudiante
     var property materia
+}
+
+class GestorMateriaAprobada inherits GestorMateria {
     var property nota
 }
+
+
 object gestorAprobadaFactory{
-    method aprobada(estudiante, materia, nota){
+    method agregar(estudiante, materia, nota){
         return new GestorMateriaAprobada(estudiante = estudiante, materia = materia, nota = nota)
     }
 }
 
+object gestorInscriptoFactory{
+        method agregar(estudiante, materia){
+        return new GestorMateria(estudiante = estudiante, materia = materia)
+    }
+}
+
+
+
 class Materia{
-    const carrera
+    const property carrera
 }
 
 
 //TEST
 object listaAMaterias{
-    method materiasAprobadas(estudiante){
-        return estudiante.gestor().materiasAprobadas().map({gestorM => gestorM.materia()})
+    method materias(lista){
+        return lista.map({gestorM => gestorM.materia()})
+        //return estudiante.gestor().materiasAprobadas().map({gestorM => gestorM.materia()})
+    }
+}
+
+object listaACarreras{
+    method carreras(lista){
+        return lista.map({gestorM => gestorM.materia().carrera()})
     }
 }

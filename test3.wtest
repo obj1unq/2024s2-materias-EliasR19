@@ -261,13 +261,68 @@ describe "PUNTO 6"{
         //manuela.gestor().inscribir(obj1)
 
         assert.equals([pepe], obj1.inscriptos())
-        
+
         assert.throwsException({ manuela.gestor().inscribir(obj1) })
         assert.equals([manuela], obj1.listaEspera())
 
 
     }
     
+}
+
+describe "PUNTO 7"{    
+    const pepe = new Estudiante()
+    const manuela = new Estudiante()
+    const elias = new Estudiante()
+    //PROGRAMACION
+    const elemProg = new Materia(carrera = programacion)
+    const mate1 = new Materia(carrera = programacion)
+    const obj1 = new Materia(carrera = programacion)
+    const obj2 = new Materia(carrera = programacion)
+    const obj3 = new Materia(carrera = programacion)
+    const trabajoFinal = new Materia(carrera = programacion)
+    const baseDatos = new Materia(carrera = programacion)
+
+    test "Dar de baja a materia"{
+        programacion.materias([elemProg, mate1, obj1, obj2, obj3, trabajoFinal, baseDatos])
+
+
+        pepe.gestor().inscribirCarrera(programacion)
+        pepe.gestor().inscribir(obj1)
+        pepe.gestor().inscribir(elemProg)
+
+        pepe.gestor().darDeBaja(elemProg)
+
+        const materiasInscipto = listaAMaterias.materias(pepe.gestor().materiasInscriptoActual())
+
+        assert.equals([obj1], materiasInscipto)
+    }
+
+    test "Inscribir siguiente"{
+        programacion.materias([elemProg, mate1, obj1, obj2, obj3, trabajoFinal, baseDatos])
+        obj1.cupo(2)
+
+        pepe.gestor().inscribirCarrera(programacion)
+        elias.gestor().inscribirCarrera(programacion)
+        manuela.gestor().inscribirCarrera(programacion)
+
+        pepe.gestor().inscribir(obj1)
+        manuela.gestor().inscribir(obj1)
+        assert.throwsException({ elias.gestor().inscribir(obj1) })
+
+        const materiasInsciptoE = listaAMaterias.materias(elias.gestor().materiasInscriptoActual())
+
+        //verificar anotados en listas
+        assert.equals([pepe, manuela], obj1.inscriptos())
+        assert.equals([elias], obj1.listaEspera())
+
+        assert.equals([], materiasInsciptoE)
+
+        manuela.gestor().darDeBaja(obj1)
+        //manuela se va de la amteria
+        assert.equals([pepe, elias], obj1.inscriptos())
+        assert.equals([], obj1.listaEspera()) 
+    }
 }
 
 

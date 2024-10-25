@@ -35,8 +35,8 @@ class GestorEstudiante{
 
     method inscribir(materia){
         self.validarInscribir(materia) // comentar para test todos los test antes del PUNTO 5
-        gestorMateria.validarCupo(nombre, materia)
-        gestorMateria.anotarEstudiante(nombre, materia)
+        gestorMateria.verificarCupoYAnotar(nombre, materia) //PUNTO 6
+        //gestorMateria.anotarEstudiante(nombre, materia) //PUNTO 6
         materiasInscriptoActual.add(gestorInscriptoFactory.agregar(nombre, materia))
     }
 
@@ -85,7 +85,16 @@ class GestorEstudiante{
         return  materia.correlativas().all({m => listaAMaterias.materias(materiasAprobadas).contains(m)})
     }
  
+    //PUNTO 7 
+    method darDeBaja(materia){
+        materiasInscriptoActual.remove(self.buscarGestorDe(materia))
+        gestorMateria.darDeBaja(nombre, materia)
+        gestorMateria.inscribirSiguiente(materia)
+    }
 
+    method buscarGestorDe(materia){
+        return materiasInscriptoActual.find({ gestorM => gestorM.materia() == materia})
+    }
 }
 
 class GestorMateriaInscribir{
@@ -142,11 +151,28 @@ object gestorMateria {
         materia.agregarALista(estudiante)
     }
 
-    method validarCupo(estudiante, materia){
+    method verificarCupoYAnotar(estudiante, materia){
         if(materia.inscriptos().size() >= materia.cupo()){
-            self.anotarEnLista(estudiante, materia) // PREGUNTAR se puede agregar eso aca?
+            self.anotarEnLista(estudiante, materia)
             self.error("No hay cupo, queda en lista de espera")            
-        } 
+        } else {
+            self.anotarEstudiante(estudiante, materia)
+        }
+    }
+
+    method inscribirSiguiente(materia){
+
+        if(!materia.listaEspera().isEmpty()){
+            const estudiante = materia.listaEspera().head()
+            materia.listaEspera().remove(estudiante)
+
+            estudiante.gestor().inscribir(materia)
+            //self.anotarEstudiante(estudiante, materia)
+        }
+    }
+
+    method darDeBaja(estudiante, materia){
+        materia.inscriptos().remove(estudiante)
     }
 }
 

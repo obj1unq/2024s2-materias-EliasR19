@@ -95,6 +95,10 @@ class GestorEstudiante{
     method buscarGestorDe(materia){
         return materiasInscriptoActual.find({ gestorM => gestorM.materia() == materia})
     }
+
+    method materiasEnListaDeEspera(){   //materiaTodo = una de todas las materias que tiene X carrera
+        return self.materiasDeCarrerasInscripto().filter({ materiaTodo => materiaTodo.listaEspera().contains(nombre)})
+    }
 }
 
 class GestorMateriaInscribir{

@@ -99,6 +99,19 @@ class GestorEstudiante{
     method materiasEnListaDeEspera(){   //materiaTodo = una de todas las materias que tiene X carrera
         return self.materiasDeCarrerasInscripto().filter({ materiaTodo => materiaTodo.listaEspera().contains(nombre)})
     }
+
+    method todasMateriasPuedeInscribirDe(carrera){
+        return self.materiasDe(carrera).filter({ materiaTodo => self.sePuedeInscribir(materiaTodo)})
+    }
+
+    method sePuedeInscribir(materia){
+            return self.materiaPerteneceACarrera(materia) && !self.tieneAprobada(materia) && !self.estaInscriptoEn(materia) && self.tieneCorrelativaDe(materia) 
+
+    }
+
+    method materiasDe(carrera){
+        return carrera.materias()
+    }
 }
 
 class GestorMateriaInscribir{

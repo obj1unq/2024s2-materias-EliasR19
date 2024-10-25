@@ -391,6 +391,48 @@ describe "PUNTO 9"{
     }
 }
 
+describe "PUNTO 10"{
+    const pepe = new Estudiante()
+    //PROGRAMACION
+    const elemProg = new Materia(carrera = programacion)
+    const mate1 = new Materia(carrera = programacion)
+    const obj1 = new Materia(carrera = programacion)
+    const obj2 = new Materia(carrera = programacion)
+    const obj3 = new Materia(carrera = programacion)
+    const trabajoFinal = new Materia(carrera = programacion)
+    const baseDatos = new Materia(carrera = programacion)
+            //MEDICINA
+    const quimica = new Materia(carrera = medicina)
+    const bio1 = new Materia(carrera = medicina)
+    const bio2 = new Materia(carrera = medicina)
+    const anatomiaGrl = new Materia(carrera = medicina)
+
+    test "pepe se puede inscribir a X materias de su carrera"{
+        programacion.materias([elemProg, mate1, obj1, obj2, obj3, trabajoFinal, baseDatos])     
+        medicina.materias([quimica, bio1, bio2, anatomiaGrl])
+
+        obj3.correlativas([mate1,obj2,obj1])
+        bio2.correlativas([bio1])
+
+        pepe.gestor().inscribirCarrera(programacion)
+        pepe.gestor().inscribirCarrera(medicina)
+
+        pepe.gestor().materiaAprobada(mate1, 10)
+        pepe.gestor().materiaAprobada(obj2, 10)
+        pepe.gestor().materiaAprobada(bio1, 10)
+
+        pepe.gestor().inscribir(elemProg)
+        pepe.gestor().inscribir(baseDatos)
+        pepe.gestor().inscribir(quimica)
+        pepe.gestor().inscribir(anatomiaGrl)
+
+        assert.equals([obj1, trabajoFinal], pepe.gestor().todasMateriasPuedeInscribirDe(programacion))
+        assert.equals([bio2], pepe.gestor().todasMateriasPuedeInscribirDe(medicina))
+
+
+    }
+}
+
 
 //TEORIA (pasar a papel)
 //en la super clase se tiene un metodo que llama a otros métodos, y ese metodo todos lo heredan y nadie lo modifica

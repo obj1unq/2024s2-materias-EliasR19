@@ -204,7 +204,38 @@ describe "PUNTO 5"{
     }
 }
 
+describe "PUNTO 6"{
+            const pepe = new Estudiante()
+        //PROGRAMACION
+    const elemProg = new Materia(carrera = programacion)
+    const mate1 = new Materia(carrera = programacion)
+    const obj1 = new Materia(carrera = programacion)
+    const obj2 = new Materia(carrera = programacion)
+    const obj3 = new Materia(carrera = programacion)
+    const trabajoFinal = new Materia(carrera = programacion)
+    const baseDatos = new Materia(carrera = programacion)
+    test "Inscribir con validar"{
+        //materias de carrera
+        programacion.materias([elemProg, mate1, obj1, obj2, obj3, trabajoFinal, baseDatos])
+        pepe.gestor().inscribirCarrera(programacion)
 
+       //Correlativas
+        obj2.correlativas([obj1, mate1])
+
+        //correlativas aprobadas
+        pepe.gestor().materiaAprobada(obj1, 8)
+        pepe.gestor().materiaAprobada(mate1, 8)
+
+        assert.doesNotThrowException({pepe.gestor().inscribir(obj2)})
+        pepe.gestor().inscribir(elemProg)
+
+        
+        const materiasInscipto = listaAMaterias.materias(pepe.gestor().materiasInscriptoActual())
+
+        assert.equals([obj2, elemProg], materiasInscipto)
+    }
+    
+}
 
 
 //TEORIA (pasar a papel)

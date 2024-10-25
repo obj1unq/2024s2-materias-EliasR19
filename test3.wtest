@@ -438,6 +438,112 @@ describe "PUNTO 10"{
 }
 
 
+describe "TESTS TAREA" {
+    const roque = new Estudiante()
+    const luis = new Estudiante()
+    const romina = new Estudiante()
+    const alicia = new Estudiante()  
+    const ana = new Estudiante()
+    //PROGRAMACION
+    const elemProg = new Materia(carrera = programacion)
+    const mate1 = new Materia(carrera = programacion)
+    const obj1 = new Materia(carrera = programacion)
+    const obj2 = new Materia(carrera = programacion)
+    const obj3 = new Materia(carrera = programacion)
+    const trabajoFinal = new Materia(carrera = programacion)
+    const baseDatos = new Materia(carrera = programacion)
+    const progConcurrente = new Materia(carrera = programacion)
+            //MEDICINA
+    const quimica = new Materia(carrera = medicina)
+    const bio1 = new Materia(carrera = medicina)
+    const bio2 = new Materia(carrera = medicina)
+    const anatomiaGrl = new Materia(carrera = medicina)
+
+
+    method initialize(){
+        programacion.materias([elemProg, mate1, obj1, obj2, obj3, trabajoFinal, baseDatos,progConcurrente]) 
+        medicina.materias([quimica, bio1, bio2, anatomiaGrl])  
+
+        obj2.correlativas([obj1, mate1])
+        obj3.correlativas([obj2, baseDatos])
+        progConcurrente.correlativas([obj1, baseDatos])
+
+        bio2.correlativas([bio1])
+
+        obj2.cupo(3)
+
+        roque.gestor().inscribirCarrera(programacion)
+        luis.gestor().inscribirCarrera(programacion)
+        alicia.gestor().inscribirCarrera(programacion)
+        romina.gestor().inscribirCarrera(programacion)
+        ana.gestor().inscribirCarrera(programacion)
+
+        roque.gestor().inscribirCarrera(medicina)
+
+        roque.gestor().materiaAprobada(elemProg, 10)
+        roque.gestor().materiaAprobada(mate1, 10)
+        roque.gestor().materiaAprobada(obj1, 10)
+        roque.gestor().materiaAprobada(baseDatos, 10)
+        roque.gestor().materiaAprobada(quimica, 10)
+        roque.gestor().materiaAprobada(bio1, 10)
+
+        luis.gestor().materiaAprobada(elemProg, 10)
+        luis.gestor().materiaAprobada(mate1, 10)
+        luis.gestor().materiaAprobada(obj1, 10)
+
+        romina.gestor().materiaAprobada(elemProg, 10)
+        romina.gestor().materiaAprobada(mate1, 10)
+        romina.gestor().materiaAprobada(obj1, 10)
+
+        alicia.gestor().materiaAprobada(elemProg, 10)
+        alicia.gestor().materiaAprobada(mate1, 10)
+        alicia.gestor().materiaAprobada(obj1, 10)
+
+        ana.gestor().materiaAprobada(elemProg, 10)
+    }
+
+    test"1" {
+        assert.doesNotThrowException({roque.gestor().inscribir(obj2)})
+        assert.throwsException({roque.gestor().inscribir(obj3)})
+        assert.throwsException({roque.gestor().inscribir(obj1)})
+    }
+
+    test"2"{
+        assert.doesNotThrowException({roque.gestor().inscribir(obj2)})
+        assert.doesNotThrowException({roque.gestor().inscribir(progConcurrente)})
+        assert.doesNotThrowException({roque.gestor().inscribir(bio2)})
+    }
+
+    test "3 roque no se puede inscribir"{
+        luis.gestor().inscribir(obj2)
+        romina.gestor().inscribir(obj2)
+        alicia.gestor().inscribir(obj2)
+
+        assert.throwsException({roque.gestor().inscribir(obj2)})
+
+        assert.equals([luis, romina, alicia], gestorMateria.estudiantesInscriptosEn(obj2))
+        assert.equals([roque], gestorMateria.estudiantesEsperaEn(obj2))
+    } 
+
+    test "4 roque se va de la lista de espera" {
+        luis.gestor().inscribir(obj2)
+        romina.gestor().inscribir(obj2)
+        alicia.gestor().inscribir(obj2)
+
+        assert.throwsException({roque.gestor().inscribir(obj2)})
+
+        assert.equals([luis, romina, alicia], gestorMateria.estudiantesInscriptosEn(obj2))
+        assert.equals([roque], gestorMateria.estudiantesEsperaEn(obj2))
+
+        romina.gestor().darDeBaja(obj2)
+
+        assert.equals([luis, alicia, roque], gestorMateria.estudiantesInscriptosEn(obj2))
+
+
+    }
+
+}
+
 //TEORIA (pasar a papel)
 //en la super clase se tiene un metodo que llama a otros métodos, y ese metodo todos lo heredan y nadie lo modifica
 //template method, es un metodo tipo funcion que tiene partes adentro que se van cambiando en otrs lados. y la formula del metodo es la misma, pero cambias datos.

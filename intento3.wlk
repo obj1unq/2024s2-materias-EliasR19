@@ -35,6 +35,8 @@ class GestorEstudiante{
 
     method inscribir(materia){
         self.validarInscribir(materia) // comentar para test todos los test antes del PUNTO 5
+        gestorMateria.validarCupo(nombre, materia)
+        gestorMateria.anotarEstudiante(nombre, materia)
         materiasInscriptoActual.add(gestorInscriptoFactory.agregar(nombre, materia))
     }
 
@@ -86,12 +88,12 @@ class GestorEstudiante{
 
 }
 
-class GestorMateria{
+class GestorMateriaInscribir{
     var property estudiante
     var property materia
 }
 
-class GestorMateriaAprobada inherits GestorMateria {
+class GestorMateriaAprobada inherits GestorMateriaInscribir {
     var property nota
 }
 
@@ -104,7 +106,7 @@ object gestorAprobadaFactory{
 
 object gestorInscriptoFactory{
         method agregar(estudiante, materia){
-        return new GestorMateria(estudiante = estudiante, materia = materia)
+        return new GestorMateriaInscribir(estudiante = estudiante, materia = materia)
     }
 }
 
@@ -113,6 +115,39 @@ object gestorInscriptoFactory{
 class Materia{
     const property carrera
     var property correlativas = []
+
+    var property cupo = 3 // canitdad maxima
+    const property inscriptos = []
+    const property listaEspera = []
+
+    method anotarEstudiante(estudiante){
+        inscriptos.add(estudiante)
+    }
+
+    method agregarALista(estudiante){
+        listaEspera.add(estudiante)
+    }
+
+}
+
+object gestorMateria {
+
+    method anotarEstudiante(estudiante, materia){
+        materia.anotarEstudiante(estudiante)
+        
+    }
+
+
+    method anotarEnLista(estudiante, materia){
+        materia.agregarALista(estudiante)
+    }
+
+    method validarCupo(estudiante, materia){
+        if(materia.inscriptos().size() >= materia.cupo()){
+            self.anotarEnLista(estudiante, materia) // PREGUNTAR se puede agregar eso aca?
+            self.error("No hay cupo, queda en lista de espera")            
+        } 
+    }
 }
 
 
@@ -123,10 +158,3 @@ object listaAMaterias{
         //return estudiante.gestor().materiasAprobadas().map({gestorM => gestorM.materia()})
     }
 }
-
-/* object listaACarreras{
-    method carreras(lista){
-        return lista.map({gestorM => gestorM.materia().carrera()})
-    }
-}
- */

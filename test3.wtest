@@ -205,7 +205,7 @@ describe "PUNTO 5"{
 }
 
 describe "PUNTO 6"{
-            const pepe = new Estudiante()
+    const pepe = new Estudiante()
         //PROGRAMACION
     const elemProg = new Materia(carrera = programacion)
     const mate1 = new Materia(carrera = programacion)
@@ -214,6 +214,7 @@ describe "PUNTO 6"{
     const obj3 = new Materia(carrera = programacion)
     const trabajoFinal = new Materia(carrera = programacion)
     const baseDatos = new Materia(carrera = programacion)
+
     test "Inscribir con validar"{
         //materias de carrera
         programacion.materias([elemProg, mate1, obj1, obj2, obj3, trabajoFinal, baseDatos])
@@ -229,10 +230,42 @@ describe "PUNTO 6"{
         assert.doesNotThrowException({pepe.gestor().inscribir(obj2)})
         pepe.gestor().inscribir(elemProg)
 
-        
+
         const materiasInscipto = listaAMaterias.materias(pepe.gestor().materiasInscriptoActual())
 
         assert.equals([obj2, elemProg], materiasInscipto)
+    }
+
+    const manuela = new Estudiante()
+    test "Hay cupos"{
+        obj1.cupo(3)
+        programacion.materias([elemProg, mate1, obj1, obj2, obj3, trabajoFinal, baseDatos])
+
+        pepe.gestor().inscribirCarrera(programacion)
+        manuela.gestor().inscribirCarrera(programacion)
+
+        pepe.gestor().inscribir(obj1)
+        manuela.gestor().inscribir(obj1)
+
+        assert.equals([pepe, manuela], obj1.inscriptos())
+    }
+
+    test "NO Hay cupos, va a lista de espera"{
+        obj1.cupo(1)
+        programacion.materias([elemProg, mate1, obj1, obj2, obj3, trabajoFinal, baseDatos])
+
+        pepe.gestor().inscribirCarrera(programacion)
+        manuela.gestor().inscribirCarrera(programacion)
+
+        pepe.gestor().inscribir(obj1)
+        //manuela.gestor().inscribir(obj1)
+
+        assert.equals([pepe], obj1.inscriptos())
+        
+        assert.throwsException({ manuela.gestor().inscribir(obj1) })
+        assert.equals([manuela], obj1.listaEspera())
+
+
     }
     
 }

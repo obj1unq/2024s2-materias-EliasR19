@@ -16,6 +16,7 @@ object derecho{
 
 class Estudiante{
     const property gestor = new GestorEstudiante(nombre = self)
+    const property carreras = #{}
 }
 
 class GestorEstudiante{
@@ -23,12 +24,17 @@ class GestorEstudiante{
     const property materiasAprobadas = []
     const property materiasInscriptoActual = []
 
+    method inscribirCarrera(carrera){
+        nombre.carreras().add(carrera)
+    }
+
     method materiaAprobada(materia, nota){
         self.validarMateriaAprobada(materia)
         materiasAprobadas.add(gestorAprobadaFactory.agregar(nombre, materia, nota))
     }
 
     method inscribir(materia){
+        //self.validarInscribir(materia) // comentar para test independientes de la condicion PUTO 5
         materiasInscriptoActual.add(gestorInscriptoFactory.agregar(nombre, materia))
     }
 
@@ -53,10 +59,33 @@ class GestorEstudiante{
     }
 
     //PUNTO 4 preguntar
-    method mateirasDeCarrerasInscripto(){
-        return listaACarreras.carreras(materiasInscriptoActual).asSet().flatMap({carrera => carrera.materias()})
+    method mateirasDeCarrerasInscripto(){   //MOVER LA CARRERA, que el esutidnate si sepa su carrera
+        return nombre.carreras().flatMap({carrera => carrera.materias()})
     }
     // se pueden hacer objetos para calcular cosas asi? o es mejor ponerlos en un método o hacerlo de otra forma?
+
+    //PUNTO 5
+    method validarInscribir(materia){
+       /* if(!self.materiaPerteneceACarrera(materia) || self.tieneAprobada(materia) || self.estaInscriptoEn(materia) || self.tieneCorrelativaDe(materia) ){
+                self.error("No se puede inscribir")
+            }
+*/
+         if(self.tieneAprobada(materia) || self.estaInscriptoEn(materia) || self.tieneCorrelativaDe(materia) ){
+                self.error("No se puede inscribir")
+            }
+    }
+
+    method materiaPerteneceACarrera(materia){
+        return self.mateirasDeCarrerasInscripto().contains(materia)
+    }
+
+    method estaInscriptoEn(materia){
+        return listaAMaterias.materias(materiasInscriptoActual).contains(materia)
+    }
+
+    method tieneCorrelativaDe(materia){
+        return  materia.correlativas().all({m => listaAMaterias.materias(materiasAprobadas).contains(m)})
+    }
  
 
 }
@@ -87,6 +116,7 @@ object gestorInscriptoFactory{
 
 class Materia{
     const property carrera
+    var property correlativas = []
 }
 
 

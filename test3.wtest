@@ -1,12 +1,19 @@
 import intento3.*
 
-describe "punto 1" {
+describe "punto 1" {        
+    const pepe = new Estudiante()
+    const matematica1 = new Materia(carrera = programacion)
     test "estudiante materia aprobada"{
-        const pepe = new Estudiante()
-        const matematica1 = new Materia(carrera = programacion)
+
         pepe.gestor().materiaAprobada(matematica1, 7)
 
         assert.equals([matematica1], listaAMaterias.materias(pepe.gestor().materiasAprobadas()))
+    }
+
+    test "inscribir carrera" {
+        pepe.gestor().inscribirCarrera(programacion)
+
+        assert.equals(#{programacion}, pepe.carreras())
     }
 }
 
@@ -60,7 +67,7 @@ describe "punto 3"{
 describe "punto 4"{
     const pepe = new Estudiante()
         //PROGRAMACION
-    const elemProf = new Materia(carrera = programacion)
+    const elemProg = new Materia(carrera = programacion)
     const mate1 = new Materia(carrera = programacion)
     const obj1 = new Materia(carrera = programacion)
     const obj2 = new Materia(carrera = programacion)
@@ -76,44 +83,113 @@ describe "punto 4"{
     const anatomiaGrl = new Materia(carrera = medicina)
     
     test "todas las materias de una carrera a la que esta inscripto"{
-        programacion.materias([elemProf, mate1, obj1, obj2, obj3, trabajoFinal, baseDatos])
+        pepe.gestor().inscribirCarrera(programacion)
+
+        programacion.materias([elemProg, mate1, obj1, obj2, obj3, trabajoFinal, baseDatos])
         medicina.materias([quimica, bio1, bio2, anatomiaGrl])
 
         pepe.gestor().inscribir(obj1)
-        pepe.gestor().inscribir(elemProf)
+        pepe.gestor().inscribir(elemProg)
 
-        const materiasProg = [elemProf, mate1, obj1, obj2, obj3, trabajoFinal, baseDatos]
+        const materiasProg = #{elemProg, mate1, obj1, obj2, obj3, trabajoFinal, baseDatos}
 
         assert.equals(materiasProg, pepe.gestor().mateirasDeCarrerasInscripto())
 
     }
     test "todas las materias de las carreras a las que esta inscripto"{
-        programacion.materias([elemProf, mate1, obj1, obj2, obj3, trabajoFinal, baseDatos])
+        programacion.materias([elemProg, mate1, obj1, obj2, obj3, trabajoFinal, baseDatos])
         medicina.materias([quimica, bio1, bio2, anatomiaGrl])
 
+        pepe.gestor().inscribirCarrera(programacion)
+        pepe.gestor().inscribirCarrera(medicina)
+
         pepe.gestor().inscribir(obj1)
-        pepe.gestor().inscribir(elemProf)
+        pepe.gestor().inscribir(elemProg)
         pepe.gestor().inscribir(quimica)
 
 
-        const materiasProg = #{elemProf, mate1, obj1, obj2, obj3, trabajoFinal, baseDatos,quimica, bio1, bio2, anatomiaGrl}
+        const materiasProg = #{elemProg, mate1, obj1, obj2, obj3, trabajoFinal, baseDatos,quimica, bio1, bio2, anatomiaGrl}
 
         assert.equals(materiasProg, pepe.gestor().mateirasDeCarrerasInscripto())
 
     }
 
-    test"x"{
+}
 
-        pepe.gestor().materiaAprobada(obj1, 10)
-        
-        pepe.gestor().materiaAprobada(mate1, 10)
-        pepe.gestor().materiaAprobada(bio1, 10)
+describe "PUNTO 5"{
+        const pepe = new Estudiante()
+        //PROGRAMACION
+    const elemProg = new Materia(carrera = programacion)
+    const mate1 = new Materia(carrera = programacion)
+    const obj1 = new Materia(carrera = programacion)
+    const obj2 = new Materia(carrera = programacion)
+    const obj3 = new Materia(carrera = programacion)
+    const trabajoFinal = new Materia(carrera = programacion)
+    const baseDatos = new Materia(carrera = programacion)
 
-       // const materiasPepe = listaAMaterias.materias(pepe.gestor().materiasAprobadas())
-        //assert.equals([obj1], materiasPepe)
 
-        const carrerasPepe = listaACarreras.carreras(pepe.gestor().materiasAprobadas())
-        assert.equals([programacion, medicina], carrerasPepe)
+        //MEDICINA
+    const quimica = new Materia(carrera = medicina)
+    const bio1 = new Materia(carrera = medicina)
+    const bio2 = new Materia(carrera = medicina)
+    const anatomiaGrl = new Materia(carrera = medicina)
+    test "La materia esta en una carrera que esta cursando"{
+        programacion.materias([elemProg, mate1, obj1, obj2, obj3, trabajoFinal, baseDatos])
+        medicina.materias([quimica, bio1, bio2, anatomiaGrl])
+
+        pepe.gestor().inscribirCarrera(programacion)
+        pepe.gestor().inscribir(obj1)
+        //pepe.gestor().inscribir(elemProg)
+        //pepe.gestor().inscribir(quimica)
+
+
+        assert.that(pepe.gestor().materiaPerteneceACarrera(elemProg))
+    }
+
+    test "La materia esta aprobada"{
+        pepe.gestor().inscribir(obj1)
+        pepe.gestor().materiaAprobada(obj2, 8)
+
+
+        assert.that(pepe.gestor().tieneAprobada(obj2))
+    }
+
+    test "Esta inscripto en materia"{
+         pepe.gestor().inscribirCarrera(programacion)
+         pepe.gestor().inscribir(obj1)
+        pepe.gestor().materiaAprobada(obj2, 8)
+
+        assert.that(pepe.gestor().estaInscriptoEn(obj1))
+    }
+
+    test "Tiene aprobada las correlativas"{
+        obj2.correlativas([obj1, mate1])
+        pepe.gestor().materiaAprobada(obj1, 8)
+        pepe.gestor().materiaAprobada(mate1, 8)
+
+
+        assert.equals([obj1, mate1], obj2.correlativas())
+
+        assert.that(pepe.gestor().tieneCorrelativaDe(obj2))
+
+    }
+
+    test "Completo da que SI, sin fallos en el validar"{
+        //materias de carrera
+        programacion.materias([elemProg, mate1, obj1, obj2, obj3, trabajoFinal, baseDatos])
+
+
+       //Correlativas
+        obj2.correlativas([obj1, mate1])
+
+        //carrera
+        pepe.gestor().inscribir(elemProg)
+
+        //correlativas aprobadas
+        pepe.gestor().materiaAprobada(obj1, 8)
+        pepe.gestor().materiaAprobada(mate1, 8)
+
+        assert.doesNotThrowException(pepe.gestor().inscribir(obj2))
     }
 }
 

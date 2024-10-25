@@ -34,7 +34,7 @@ class GestorEstudiante{
     }
 
     method inscribir(materia){
-        //self.validarInscribir(materia) // comentar para test independientes de la condicion PUTO 5
+        self.validarInscribir(materia) // comentar para test todos los test antes del PUNTO 5
         materiasInscriptoActual.add(gestorInscriptoFactory.agregar(nombre, materia))
     }
 
@@ -59,24 +59,20 @@ class GestorEstudiante{
     }
 
     //PUNTO 4 preguntar
-    method mateirasDeCarrerasInscripto(){   //MOVER LA CARRERA, que el esutidnate si sepa su carrera
+    method materiasDeCarrerasInscripto(){   //MOVER LA CARRERA, que el esutidnate si sepa su carrera
         return nombre.carreras().flatMap({carrera => carrera.materias()})
     }
     // se pueden hacer objetos para calcular cosas asi? o es mejor ponerlos en un método o hacerlo de otra forma?
 
     //PUNTO 5
     method validarInscribir(materia){
-       /* if(!self.materiaPerteneceACarrera(materia) || self.tieneAprobada(materia) || self.estaInscriptoEn(materia) || self.tieneCorrelativaDe(materia) ){
-                self.error("No se puede inscribir")
-            }
-*/
-         if(self.tieneAprobada(materia) || self.estaInscriptoEn(materia) || self.tieneCorrelativaDe(materia) ){
+         if(!self.materiaPerteneceACarrera(materia) || self.tieneAprobada(materia) || self.estaInscriptoEn(materia) || !self.tieneCorrelativaDe(materia) ){
                 self.error("No se puede inscribir")
             }
     }
 
     method materiaPerteneceACarrera(materia){
-        return self.mateirasDeCarrerasInscripto().contains(materia)
+        return self.materiasDeCarrerasInscripto().contains(materia)
     }
 
     method estaInscriptoEn(materia){
@@ -128,8 +124,9 @@ object listaAMaterias{
     }
 }
 
-object listaACarreras{
+/* object listaACarreras{
     method carreras(lista){
         return lista.map({gestorM => gestorM.materia().carrera()})
     }
 }
+ */

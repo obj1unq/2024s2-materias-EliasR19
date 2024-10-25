@@ -1,5 +1,5 @@
 import intento3.*
-
+//COMENTAR VALIDAR DE ISNCRIBIR PARA TODOS LOS TEST ANTES DEL PUNTO 5 "COMPLETO..."
 describe "punto 1" {        
     const pepe = new Estudiante()
     const matematica1 = new Materia(carrera = programacion)
@@ -93,7 +93,7 @@ describe "punto 4"{
 
         const materiasProg = #{elemProg, mate1, obj1, obj2, obj3, trabajoFinal, baseDatos}
 
-        assert.equals(materiasProg, pepe.gestor().mateirasDeCarrerasInscripto())
+        assert.equals(materiasProg, pepe.gestor().materiasDeCarrerasInscripto())
 
     }
     test "todas las materias de las carreras a las que esta inscripto"{
@@ -174,22 +174,33 @@ describe "PUNTO 5"{
 
     }
 
-    test "Completo da que SI, sin fallos en el validar"{
+    test "COMPLETO. Sin fallos en el validar"{
         //materias de carrera
         programacion.materias([elemProg, mate1, obj1, obj2, obj3, trabajoFinal, baseDatos])
-
+        pepe.gestor().inscribirCarrera(programacion)
 
        //Correlativas
         obj2.correlativas([obj1, mate1])
-
-        //carrera
-        pepe.gestor().inscribir(elemProg)
 
         //correlativas aprobadas
         pepe.gestor().materiaAprobada(obj1, 8)
         pepe.gestor().materiaAprobada(mate1, 8)
 
-        assert.doesNotThrowException(pepe.gestor().inscribir(obj2))
+        assert.doesNotThrowException({pepe.gestor().inscribir(obj2)})
+    }
+
+    test "Falla porque no tiene correlativas"{
+        //materias de carrera
+        programacion.materias([elemProg, mate1, obj1, obj2, obj3, trabajoFinal, baseDatos])
+        pepe.gestor().inscribirCarrera(programacion)
+
+       //Correlativas
+        obj2.correlativas([obj1, mate1])
+
+        //correlativas aprobadas
+        pepe.gestor().materiaAprobada(obj1, 8)
+
+         assert.throwsException({pepe.gestor().inscribir(obj2)})
     }
 }
 

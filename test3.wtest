@@ -325,6 +325,39 @@ describe "PUNTO 7"{
     }
 }
 
+describe "PUNTO 8"{
+        const pepe = new Estudiante()
+    const manuela = new Estudiante()
+    const elias = new Estudiante()
+    //PROGRAMACION
+    const elemProg = new Materia(carrera = programacion)
+    const mate1 = new Materia(carrera = programacion)
+    const obj1 = new Materia(carrera = programacion)
+    const obj2 = new Materia(carrera = programacion)
+    const obj3 = new Materia(carrera = programacion)
+    const trabajoFinal = new Materia(carrera = programacion)
+    const baseDatos = new Materia(carrera = programacion)
+
+    test "Estudiantes inscriptos y en lista de espera"{
+        programacion.materias([elemProg, mate1, obj1, obj2, obj3, trabajoFinal, baseDatos])
+        obj1.cupo(2)
+
+        pepe.gestor().inscribirCarrera(programacion)
+        elias.gestor().inscribirCarrera(programacion)
+        manuela.gestor().inscribirCarrera(programacion)
+
+        pepe.gestor().inscribir(obj1)
+        manuela.gestor().inscribir(obj1)
+        assert.throwsException({ elias.gestor().inscribir(obj1) })
+
+        const materiasInsciptoE = listaAMaterias.materias(elias.gestor().materiasInscriptoActual())
+
+        //verificar anotados en listas
+        assert.equals([pepe, manuela], gestorMateria.estudiantesInscriptosEn(obj1))
+        assert.equals([elias], gestorMateria.estudiantesEsperaEn(obj1))
+    }
+}
+
 
 //TEORIA (pasar a papel)
 //en la super clase se tiene un metodo que llama a otros métodos, y ese metodo todos lo heredan y nadie lo modifica

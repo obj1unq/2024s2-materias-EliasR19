@@ -174,6 +174,14 @@ object gestorMateria {
     method darDeBaja(estudiante, materia){
         materia.inscriptos().remove(estudiante)
     }
+
+    method estudiantesInscriptosEn(materia){
+        return materia.inscriptos()
+    }
+
+    method estudiantesEsperaEn(materia){
+        return materia.listaEspera()
+    }
 }
 
 

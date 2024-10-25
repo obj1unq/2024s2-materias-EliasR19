@@ -110,7 +110,7 @@ describe "punto 4"{
 
         const materiasProg = #{elemProg, mate1, obj1, obj2, obj3, trabajoFinal, baseDatos,quimica, bio1, bio2, anatomiaGrl}
 
-        assert.equals(materiasProg, pepe.gestor().mateirasDeCarrerasInscripto())
+        assert.equals(materiasProg, pepe.gestor().materiasDeCarrerasInscripto())
 
     }
 
@@ -147,6 +147,8 @@ describe "PUNTO 5"{
     }
 
     test "La materia esta aprobada"{
+        programacion.materias([elemProg, mate1, obj1, obj2, obj3, trabajoFinal, baseDatos])
+        pepe.gestor().inscribirCarrera(programacion)
         pepe.gestor().inscribir(obj1)
         pepe.gestor().materiaAprobada(obj2, 8)
 
@@ -155,14 +157,16 @@ describe "PUNTO 5"{
     }
 
     test "Esta inscripto en materia"{
-         pepe.gestor().inscribirCarrera(programacion)
-         pepe.gestor().inscribir(obj1)
+        programacion.materias([elemProg, mate1, obj1, obj2, obj3, trabajoFinal, baseDatos])
+        pepe.gestor().inscribirCarrera(programacion)
+        pepe.gestor().inscribir(obj1)
         pepe.gestor().materiaAprobada(obj2, 8)
 
         assert.that(pepe.gestor().estaInscriptoEn(obj1))
     }
 
     test "Tiene aprobada las correlativas"{
+        programacion.materias([elemProg, mate1, obj1, obj2, obj3, trabajoFinal, baseDatos])
         obj2.correlativas([obj1, mate1])
         pepe.gestor().materiaAprobada(obj1, 8)
         pepe.gestor().materiaAprobada(mate1, 8)

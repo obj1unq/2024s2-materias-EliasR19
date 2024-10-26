@@ -23,6 +23,7 @@ class GestorEstudiante{
     const nombre
     const property materiasAprobadas = []
     const property materiasInscriptoActual = []
+    var property creditos = 0
 
     method inscribirCarrera(carrera){
         nombre.carreras().add(carrera)
@@ -35,6 +36,7 @@ class GestorEstudiante{
 
     method inscribir(materia){
         self.validarInscribir(materia) // comentar para test todos los test antes del PUNTO 5
+        gestorMateria.validarInscripcionMateria(materia, nombre)
         gestorMateria.verificarCupoYAnotar(nombre, materia) //PUNTO 6
         //gestorMateria.anotarEstudiante(nombre, materia) //PUNTO 6
         materiasInscriptoActual.add(gestorInscriptoFactory.agregar(nombre, materia))
@@ -68,7 +70,7 @@ class GestorEstudiante{
 
     //PUNTO 5
     method validarInscribir(materia){
-         if(!self.materiaPerteneceACarrera(materia) || self.tieneAprobada(materia) || self.estaInscriptoEn(materia) || !self.tieneCorrelativaDe(materia) ){
+         if(!self.materiaPerteneceACarrera(materia) || self.tieneAprobada(materia) || self.estaInscriptoEn(materia) || !self.tieneRequisitos(materia) ){
                 self.error("No se puede inscribir")
             }
     }
@@ -112,6 +114,11 @@ class GestorEstudiante{
     method materiasDe(carrera){
         return carrera.materias()
     }
+
+    method tieneRequisitos(materia){
+        return gestorMateria.validarInscripcionMateria(materia, nombre)
+    }
+
 }
 
 class GestorMateriaInscribir{
@@ -140,7 +147,8 @@ object gestorInscriptoFactory{
 
 class Materia{
     const property carrera
-    var property correlativas = []
+    const property requitos = 
+    var property requisitoTipo
 
     var property cupo = 3 // canitdad maxima
     const property inscriptos = []
@@ -154,7 +162,33 @@ class Materia{
         listaEspera.add(estudiante)
     }
 
+    var property creditos = 0 // creditos que otorga
+
+
 }
+
+class Correlativa {
+    var property correlativas = []
+}
+
+class Creditos { //creditos necesarios
+    var property cantCreditosNes  = 0
+
+    method validarInscripcion(estudiante){
+        return (estudiante.gestor().creditos() < cantCreditosNes)
+    }
+}
+
+
+class Anio{
+    var property anhio = 2000
+}
+
+object nada {
+
+}
+
+
 
 object gestorMateria {
 
@@ -171,7 +205,7 @@ object gestorMateria {
     method verificarCupoYAnotar(estudiante, materia){
         if(materia.inscriptos().size() >= materia.cupo()){
             self.anotarEnLista(estudiante, materia)
-            self.error("No hay cupo, queda en lista de espera")            
+            self.error("No hay cupo, queda en lista de espera")  // Esto se puede poner aca asi? El self error ?           
         } else {
             self.anotarEstudiante(estudiante, materia)
         }
@@ -198,6 +232,10 @@ object gestorMateria {
 
     method estudiantesEsperaEn(materia){
         return materia.listaEspera()
+    }
+
+    method validarInscripcionMateria(materia, estudiante){
+        return materia.requisitoTipo().validarInscripcion(estudiante)
     }
 }
 

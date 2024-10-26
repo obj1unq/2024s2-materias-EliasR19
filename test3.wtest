@@ -544,6 +544,29 @@ describe "TESTS TAREA" {
 
 }
 
+describe "BONUS 1 REQUISITOS" {
+    const roque = new Estudiante()
+
+    //PROGRAMACION
+    const elemProg = new Materia(carrera = programacion, requisitoTipo = creditos)
+    const obj1 = new Materia(carrera = programacion, requisitoTipo = creditos)
+    test "tener X cantidad de creditos"{
+        programacion.materias([elemProg, obj1]) 
+
+        elemProg.cantCreditosNes(10)
+        obj1.cantCreditosNes(15)
+
+        roque.gestor().inscribirCarrera(programacion)
+        roque.gestor().creditos(10)
+
+        assert.doesNotThrowException({roque.gestor().inscribir(elemProg)})
+        assert.throwsException({roque.gestor().inscribir(obj1)})
+
+
+
+    }
+} 
+
 //TEORIA (pasar a papel)
 //en la super clase se tiene un metodo que llama a otros métodos, y ese metodo todos lo heredan y nadie lo modifica
 //template method, es un metodo tipo funcion que tiene partes adentro que se van cambiando en otrs lados. y la formula del metodo es la misma, pero cambias datos.
